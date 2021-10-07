@@ -1,13 +1,11 @@
-Meta Terraform Plans
-====================
+# Meta Terraform Plans
 
 This describes the meta scope for running the [condi.me github org][1] itself.
 Once bootstrapped (i.e. the resources described here have been created by
 manually running terraform), then [terraform-plans][2] can be used to
 manage resources with significantly less privileges.
 
-Running Terraform
-------------------
+## Running Terraform
 
 Terraform 1.0 (or compatible) is needed. You can download a specific version
 from the [terraform releases][3] page.
@@ -35,8 +33,7 @@ terraform runs.
     $ terraform init
     $ terraform plan -o output.tfplan
 
-Consul ACL Policy
------------------
+## Consul ACL Policy
 
 State is stored using the consul backend hosted at consul.condi.me, access is
 granted with the following Consul ACL Policy.
