@@ -8,3 +8,8 @@ resource "github_team_membership" "admins_bencord0" {
   username = "bencord0"
   role     = "maintainer"
 }
+
+resource "github_team" "notadmin" {
+  name    = "notadmin"
+  privacy = "closed"
+}
