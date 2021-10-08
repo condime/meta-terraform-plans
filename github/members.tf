@@ -3,6 +3,7 @@ locals {
 
   members = [
     "catzkorn",
+    "skipcloud",
   ]
 }
 
