@@ -7,7 +7,7 @@ resource "github_team_membership" "admins" {
   for_each = toset(local.admins)
   team_id  = github_team.admins.id
   username = each.key
-  role     = "member"
+  role     = "maintainer"
 }
 
 resource "github_team" "notadmins" {
@@ -16,8 +16,15 @@ resource "github_team" "notadmins" {
 }
 
 resource "github_team_membership" "notadmins" {
-  for_each = toset(concat(local.admins, local.members))
+  for_each = toset(local.members)
   team_id  = github_team.notadmins.id
   username = each.key
   role     = "member"
+}
+
+resource "github_team_membership" "notadmin_maintainers" {
+  for_each = toset(local.admins)
+  team_id  = github_team.notadmins.id
+  username = each.key
+  role     = "maintainer"
 }
