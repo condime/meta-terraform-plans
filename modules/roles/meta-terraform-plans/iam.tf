@@ -11,9 +11,7 @@ data "aws_iam_policy_document" "meta-terraform-plans" {
       "iam:*",
     ]
 
-    resources = [
-      "arn:aws:iam:::*",
-    ]
+    resources = ["*"]
   }
 }
 
@@ -36,6 +34,8 @@ resource "github_actions_secret" "meta-terraform-plans-aws_access_key_id" {
   plaintext_value = aws_iam_access_key.meta-terraform-plans.id
 }
 
+# Note: Imported access keys do not store `secret` in the statefile
+# This will set this value to an empty string, unless terraform manages the access key
 resource "github_actions_secret" "meta-terraform-plans-aws_secret_access_key" {
   repository      = "meta-terraform-plans"
   secret_name     = "AWS_SECRET_ACCESS_KEY"
