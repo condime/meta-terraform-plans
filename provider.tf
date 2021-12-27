@@ -9,6 +9,11 @@ terraform {
       source  = "integrations/github"
       version = "~> 4.19.0"
     }
+
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 3.70.0"
+    }
   }
 
   backend "consul" {
@@ -20,4 +25,8 @@ terraform {
 
 provider "github" {
   owner = "condime"
+}
+
+provider "aws" {
+  region = "eu-west-2"
 }
