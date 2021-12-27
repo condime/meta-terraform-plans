@@ -29,4 +29,10 @@ provider "github" {
 
 provider "aws" {
   region = "eu-west-2"
+
+  default_tags {
+    tags = {
+      ManagedBy = "condime/meta-terraform-plans"
+    }
+  }
 }
