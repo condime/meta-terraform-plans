@@ -18,6 +18,7 @@ env:
 jobs:
   terraform-import:
     name: 'Terraform Import'
+    environment: production
     runs-on: ubuntu-latest
 
     steps:

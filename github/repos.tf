@@ -21,7 +21,9 @@ module "terraform-plans" {
 
 module "terraform-plans-roles" {
   source     = "../modules/roles/terraform-plans"
-  depends_on = [module.terraform-plans]
+
+  github_oidc_provider_arn = aws_iam_openid_connect_provider.github.arn
+  github_repository        = module.terraform-plans.github_repository
 }
 
 # Secret repository, for secrets
