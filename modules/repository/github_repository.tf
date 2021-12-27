@@ -13,6 +13,10 @@ resource "github_repository" "repository" {
   allow_squash_merge = true
 
   vulnerability_alerts = true
+
+  lifecycle {
+    ignore_changes = [branches]
+  }
 }
 
 resource "github_team_repository" "admins" {

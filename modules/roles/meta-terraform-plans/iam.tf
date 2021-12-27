@@ -1,8 +1,7 @@
 # This is the first user and policy created in the account
 # It needs to be created manually, but can then be imported into terraform state
-resource "aws_iam_user_policy" "meta-terraform-plans" {
+resource "aws_iam_policy" "meta-terraform-plans" {
   name   = "meta-terraform-plans"
-  user   = aws_iam_user.meta-terraform-plans.name
   policy = data.aws_iam_policy_document.meta-terraform-plans.json
 }
 
@@ -16,6 +15,11 @@ data "aws_iam_policy_document" "meta-terraform-plans" {
       "arn:aws:iam:::*",
     ]
   }
+}
+
+resource "aws_iam_user_policy_attachment" "meta-terraform-plans" {
+  user       = aws_iam_user.meta-terraform-plans.name
+  policy_arn = aws_iam_policy.meta-terraform-plans.arn
 }
 
 resource "aws_iam_user" "meta-terraform-plans" {
