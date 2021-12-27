@@ -1,0 +1,61 @@
+name: 'Terraform Import'
+
+on:
+  workflow_dispatch:
+    inputs:
+      resource:
+        description: 'Resource Address'
+        required: true
+      id:
+        description: 'Resource ID'
+        required: true
+
+env:
+  GITHUB_OWNER: condime
+  GITHUB_TOKEN: ${{ secrets.ELEVATED_GITHUB_TOKEN }}       # Personal Access Token, contact @bencord0 to rotate
+  CONSUL_HTTP_TOKEN: ${{ secrets.CONSUL_HTTP_TOKEN }}      # Repository specific, contact @bencord0 to rotate
+
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+jobs:
+  terraform-import:
+    name: 'Terraform Import'
+    runs-on: ubuntu-latest
+
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    # Install the latest version of Terraform CLI
+    - name: Setup Terraform
+      run: |
+        if command -v terraform 2> /dev/null; then
+          terraform --version
+        else
+          TERRAFORM_RELEASE_TEMP_DIR="$(mktemp -d)"
+          TERRAFORM_RELEASE_BIN_DIR="${TF_TEMP_DIR}/$(uuidgen)"
+          wget -P "${TERRAFORM_RELEASE_TEMP_DIR}" \
+            "https://releases.hashicorp.com/terraform/${TERRAFORM_RELEASE}/terraform_${TERRAFORM_RELEASE}_linux_amd64.zip"
+
+          mkdir -v "${TERRAFORM_RELEASE_BIN_DIR}"
+          cd "${TERRAFORM_RELEASE_BIN_DIR}"
+          unzip ../terraform_${TERRAFORM_RELEASE}_linux_amd64.zip
+          export PATH="${TERRAFORM_RELEASE_BIN_DIR}:${PATH}"
+
+          terraform --version
+        fi
+
+    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+    - name: Terraform Init
+      run: terraform init
+
+    # Checks that all Terraform configuration files adhere to a canonical format
+    - name: Terraform Format
+      run: terraform fmt -check
+
+    # Imports the resource into terraform
+    - name: Terraform Plan
+      run: |
+        terraform import "${{ github.event.inputs.resource }}" "${{ github.event.inputs.id }}"
