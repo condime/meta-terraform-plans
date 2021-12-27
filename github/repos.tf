@@ -6,12 +6,22 @@ module "meta-terraform-plans" {
   name = "meta-terraform-plans"
 }
 
+module "meta-terraform-plans-roles" {
+  source     = "../modules/roles/meta-terraform-plans"
+  depends_on = [module.meta-terraform-plans]
+}
+
 # Main repository, put your cool stuff here.
 module "terraform-plans" {
   source    = "../modules/repository"
   constants = local.github_constants
 
   name = "terraform-plans"
+}
+
+module "terraform-plans-roles" {
+  source     = "../modules/roles/terraform-plans"
+  depends_on = [module.terraform-plans]
 }
 
 # Secret repository, for secrets
