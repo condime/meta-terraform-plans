@@ -8,7 +8,9 @@ module "meta-terraform-plans" {
 
 module "meta-terraform-plans-roles" {
   source     = "../modules/roles/meta-terraform-plans"
-  depends_on = [module.meta-terraform-plans]
+
+  github_oidc_provider_arn = aws_iam_openid_connect_provider.github.arn
+  github_repository        = module.meta-terraform-plans.github_repository
 }
 
 # Main repository, put your cool stuff here.
