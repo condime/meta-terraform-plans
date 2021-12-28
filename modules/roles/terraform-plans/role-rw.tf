@@ -12,43 +12,32 @@ data "aws_iam_policy_document" "assume-terraform-plans" {
     ]
 
     principals {
-      type        = "Federated"
+      type = "Federated"
       identifiers = [
         var.github_oidc_provider_arn,
       ]
     }
 
-    # Match the specific repository
+    # Match the specific repository on the `production` branch
+    # or workflow_dispatch runs in the `production` environment
     condition {
-      test     = "StringEquals"
-      variable = "token.actions.githubusercontent.com:repositry"
-
-      values = [
-        var.github_repository,
-      ]
-    }
-
-    # Match the workflow environment
-    condition {
-      test     = "StringEquals"
-      variable = "token.actions.githubusercontent.com:environment"
-
-      values = [
-        "production",
-      ]
-    }
-
-    # Match the default branch
-    condition {
-      test     = "StringEquals"
+      test     = "ForAnyValue:StringEquals"
       variable = "token.actions.githubusercontent.com:sub"
 
       values = [
         "repo:${var.github_repository}:ref:refs/heads/production",
+        "repo:${var.github_repository}:environment:production",
       ]
     }
   }
 }
 
-variable "github_oidc_provider_arn" {}
-variable "github_repository" {} # github-org/repo-name
+resource "aws_iam_role_policy_attachment" "terraform-plans" {
+  role       = aws_iam_role.terraform-plans.name
+  policy_arn = aws_iam_policy.terraform-plans.arn
+}
+
+resource "aws_iam_role_policy_attachment" "terraform-plans-rwro" {
+  role       = aws_iam_role.terraform-plans.name
+  policy_arn = aws_iam_policy.terraform-plans-ro.arn
+}
