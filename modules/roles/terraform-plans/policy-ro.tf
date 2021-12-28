@@ -12,8 +12,35 @@ data "aws_iam_policy_document" "terraform-plans-ro" {
       "s3-object-lambda:List*",
     ]
 
-    resources = [
-      "*",
+    resources = ["*"]
+  }
+
+  statement {
+    actions = [
+      "cognito-idp:ListIdentityProviders",
+      "cognito-idp:ListTagsForResource",
+      "cognito-idp:ListUserPools",
+      "cognito-idp:ListUserPoolClients",
+      "cognito-idp:ListUsers",
+      "cognito-idp:ListGroups",
+      "cognito-idp:ListUsersInGroup",
+
+      "cognito-idp:DescribeIdentityProvider",
+      "cognito-idp:DescribeUserPool",
+      "cognito-idp:DescribeUserPoolClient",
+      "cognito-idp:DescribeUserPoolDomain",
+      "cognito-idp:GetUser",
+      "cognito-idp:GetGroup",
+
+      "cognito-idp:GetIdentityProviderByIdentifier",
+      "cognito-idp:GetPoolMfaConfig",
+      "cognito-idp:GetUserPoolMfaConfig",
+
+      "iam:ListOpenIDConnectProviders",
+      "iam:ListOpenIDConnectProviderTags",
+      "iam:GetOpenIDConnectProvider",
     ]
+
+    resources = ["*"]
   }
 }

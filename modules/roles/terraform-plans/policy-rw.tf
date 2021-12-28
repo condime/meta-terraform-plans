@@ -14,31 +14,11 @@ data "aws_iam_policy_document" "terraform-plans" {
       "s3:PutObjectVersionTagging",
     ]
 
-    resources = [
-      "*",
-    ]
+    resources = ["*"]
   }
 
   statement {
     actions = [
-      "cognito-idp:ListIdentityProviders",
-      "cognito-idp:ListTagsForResource",
-      "cognito-idp:ListUserPools",
-      "cognito-idp:ListUserPoolClients",
-      "cognito-idp:ListUsers",
-      "cognito-idp:ListGroups",
-      "cognito-idp:ListUsersInGroup",
-
-      "cognito-idp:DescribeIdentityProvider",
-      "cognito-idp:DescribeUserPool",
-      "cognito-idp:DescribeUserPoolClient",
-      "cognito-idp:DescribeUserPoolDomain",
-      "cognito-idp:GetUser",
-      "cognito-idp:GetGroup",
-
-      "cognito-idp:GetIdentityProviderByIdentifier",
-      "cognito-idp:GetPoolMfaConfig",
-
       "cognito-idp:TagResource",
       "cognito-idp:UntagResource",
 
@@ -60,10 +40,15 @@ data "aws_iam_policy_document" "terraform-plans" {
       "cognito-idp:UpdateUserPool",
       "cognito-idp:UpdateUserPoolClient",
       "cognito-idp:UpdateUserPoolDomain",
+
+      "iam:CreateOpenIDConnectProvider",
+      "iam:DeleteOpenIDConnectProvider",
+      "iam:UpdateOpenIDConnectProvider",
+
+      "iam:TagOpenIDConnectProvider",
+      "iam:UntagOpenIDConnectProvider",
     ]
 
-    resources = [
-      "*",
-    ]
+    resources = ["*"]
   }
 }
