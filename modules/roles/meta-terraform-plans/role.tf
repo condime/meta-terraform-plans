@@ -21,13 +21,13 @@ data "aws_iam_policy_document" "assume-meta-terraform-plans-ro" {
       ]
     }
 
-    # Match the specific repository
+    # Match the specific repository, all branches including pull requests
     condition {
-      test     = "StringEquals"
-      variable = "token.actions.githubusercontent.com:repository"
+      test     = "StringLike"
+      variable = "token.actions.githubusercontent.com:sub"
 
       values = [
-        var.github_repository,
+        "repo:${var.github_repository}:*",
       ]
     }
   }
