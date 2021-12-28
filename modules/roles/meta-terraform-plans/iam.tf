@@ -1,18 +1,8 @@
-# This is the first user and policy created in the account
-# It needs to be created manually, but can then be imported into terraform state
-resource "aws_iam_policy" "meta-terraform-plans" {
-  name   = "meta-terraform-plans"
-  policy = data.aws_iam_policy_document.meta-terraform-plans.json
-}
-
-data "aws_iam_policy_document" "meta-terraform-plans" {
-  statement {
-    actions = [
-      "iam:*",
-    ]
-
-    resources = ["*"]
-  }
+# This is the first user created in the account
+# It needs to be created manually with an `iam:*` policy,
+# which can then be imported into terraform state and reduced.
+resource "aws_iam_user" "meta-terraform-plans" {
+  name = "meta-terraform-plans"
 }
 
 resource "aws_iam_user_policy_attachment" "meta-terraform-plans" {
@@ -20,24 +10,33 @@ resource "aws_iam_user_policy_attachment" "meta-terraform-plans" {
   policy_arn = aws_iam_policy.meta-terraform-plans.arn
 }
 
-resource "aws_iam_user" "meta-terraform-plans" {
-  name = "meta-terraform-plans"
+resource "aws_iam_user_policy_attachment" "meta-terraform-plans-ro" {
+  user       = aws_iam_user.meta-terraform-plans.name
+  policy_arn = aws_iam_policy.meta-terraform-plans-ro.arn
 }
 
 resource "aws_iam_access_key" "meta-terraform-plans" {
   user = aws_iam_user.meta-terraform-plans.name
 }
 
-resource "github_actions_secret" "meta-terraform-plans-aws_access_key_id" {
+resource "github_actions_environment_secret" "meta-terraform-plans-aws_access_key_id" {
   repository      = "meta-terraform-plans"
+  environment     = "production"
   secret_name     = "AWS_ACCESS_KEY_ID"
   plaintext_value = aws_iam_access_key.meta-terraform-plans.id
 }
 
-# Note: Imported access keys do not store `secret` in the statefile
-# This will set this value to an empty string, unless terraform manages the access key
-resource "github_actions_secret" "meta-terraform-plans-aws_secret_access_key" {
+resource "github_actions_environment_secret" "meta-terraform-plans-aws_secret_access_key" {
   repository      = "meta-terraform-plans"
+  environment     = "production"
   secret_name     = "AWS_SECRET_ACCESS_KEY"
   plaintext_value = aws_iam_access_key.meta-terraform-plans.secret
+
+  # Note: Imported access keys do not store `secret` in the statefile
+  # This will set this value to an empty string, unless terraform manages the access key
+  lifecycle {
+    ignore_changes = [
+      plaintext_value
+    ]
+  }
 }

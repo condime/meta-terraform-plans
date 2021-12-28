@@ -12,9 +12,6 @@ env:
   GITHUB_TOKEN: ${{ secrets.ELEVATED_GITHUB_TOKEN }}       # Personal Access Token, contact @bencord0 to rotate
   CONSUL_HTTP_TOKEN: ${{ secrets.CONSUL_HTTP_TOKEN }}      # Repository specific, contact @bencord0 to rotate
 
-  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
 jobs:
   terraform-import:
     name: 'Terraform Import'
