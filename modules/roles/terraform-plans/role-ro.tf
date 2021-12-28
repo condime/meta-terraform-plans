@@ -1,6 +1,6 @@
 resource "aws_iam_role" "terraform-plans-ro" {
   name               = "terraform-plans-ro"
-  assume_role_policy = data.aws_iam_policy_document.assume-terraform-plans.json
+  assume_role_policy = data.aws_iam_policy_document.assume-terraform-plans-ro.json
 }
 
 # Only permit github action workflows for the matched repository
