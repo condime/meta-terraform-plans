@@ -7,6 +7,15 @@ manage resources with significantly less privileges.
 
 ## Running Terraform
 
+PRs opened from branches in this repository trigger a `terraform plan`-only run
+as a GitHub Action. PRs merged to the `production` branch will trigger a full
+`terraform apply` run, with an approval step to verify that the plan is safe.
+
+The `Terraform` action can also be manually triggered at any time, based on a
+[`workflow_dispatch` trigger](https://github.com/condime/meta-terraform-plans/actions/workflows/terraform.yml).
+
+## Running Terraform Locally
+
 Terraform 1.0 (or compatible) is needed. You can download a specific version
 from the [terraform releases][3] page.
 
