@@ -43,4 +43,19 @@ data "aws_iam_policy_document" "terraform-plans-ro" {
 
     resources = ["*"]
   }
+
+  statement {
+    actions = [
+      "ecr-public:DescribeImageTags",
+      "ecr-public:DescribeRegistries",
+      "ecr-public:DescribeRepositories",
+      "ecr-public:DescribeImages",
+      "ecr-public:GetRegistryCatalogData",
+      "ecr-public:GetRepositoryCatalogData",
+      "ecr-public:GetRepositoryPolicy",
+      "ecr-public:ListTagsForResource",
+    ]
+
+    resources = ["*"]
+  }
 }
