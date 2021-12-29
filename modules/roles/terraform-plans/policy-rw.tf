@@ -43,10 +43,28 @@ data "aws_iam_policy_document" "terraform-plans" {
 
       "iam:CreateOpenIDConnectProvider",
       "iam:DeleteOpenIDConnectProvider",
-      "iam:UpdateOpenIDConnectProvider",
+      "iam:UpdateOpenIDConnectProviderThumbprint",
 
       "iam:TagOpenIDConnectProvider",
       "iam:UntagOpenIDConnectProvider",
+    ]
+
+    resources = ["*"]
+  }
+
+  statement {
+    actions = [
+      "ecr-public:CreateRepository",
+      "ecr-public:DeleteRepository",
+
+      "ecr-public:PutRegistryCatalogData",
+      "ecr-public:PutRepositoryCatalogData",
+
+      "ecr-public:SetRepositoryPolicy",
+      "ecr-public:DeleteRepositoryPolicy",
+
+      "ecr-public:TagResource",
+      "ecr-public:UntagResource",
     ]
 
     resources = ["*"]
