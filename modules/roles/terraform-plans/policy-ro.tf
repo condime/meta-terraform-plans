@@ -6,10 +6,9 @@ resource "aws_iam_policy" "terraform-plans-ro" {
 data "aws_iam_policy_document" "terraform-plans-ro" {
   statement {
     actions = [
-      "s3:Get*",
-      "s3:List*",
-      "s3-object-lambda:Get*",
-      "s3-object-lambda:List*",
+      "iam:GetUser",
+      "iam:GetRole",
+      "iam:GetGroup",
     ]
 
     resources = ["*"]
@@ -33,7 +32,6 @@ data "aws_iam_policy_document" "terraform-plans-ro" {
       "cognito-idp:GetGroup",
 
       "cognito-idp:GetIdentityProviderByIdentifier",
-      "cognito-idp:GetPoolMfaConfig",
       "cognito-idp:GetUserPoolMfaConfig",
 
       "iam:ListOpenIDConnectProviders",

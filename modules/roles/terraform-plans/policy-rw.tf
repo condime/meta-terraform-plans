@@ -4,6 +4,21 @@ resource "aws_iam_policy" "terraform-plans" {
 }
 
 data "aws_iam_policy_document" "terraform-plans" {
+  # Deny updating our own role
+  statement {
+    effect = "Deny"
+    actions = [
+      "iam:CreateRole",
+      "iam:DeleteRole",
+      "iam:UpdateRole",
+    ]
+
+    resources = [
+      "arn:aws:iam::055237546114:role/terraform-plan",
+      "arn:aws:iam::055237546114:role/terraform-plan-ro",
+    ]
+  }
+
   statement {
     actions = [
       # S3 Tagging
