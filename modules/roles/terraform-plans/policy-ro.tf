@@ -9,6 +9,7 @@ data "aws_iam_policy_document" "terraform-plans-ro" {
       "iam:GetUser",
       "iam:GetRole",
       "iam:GetGroup",
+      "iam:ListRolePolicies",
     ]
 
     resources = ["*"]
