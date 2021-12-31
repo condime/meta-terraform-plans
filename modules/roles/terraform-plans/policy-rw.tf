@@ -21,6 +21,15 @@ data "aws_iam_policy_document" "terraform-plans" {
 
   statement {
     actions = [
+      "iam:TagRole",
+      "iam:UntagRole",
+    ]
+
+    resources = ["*"]
+  }
+
+  statement {
+    actions = [
       # S3 Tagging
       "s3:DeleteObjectTagging",
       "s3:DeleteObjectVersionTagging",
