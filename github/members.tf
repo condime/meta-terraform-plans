@@ -4,7 +4,7 @@ locals {
   members = [
     "catzkorn",
     "skipcloud",
-    "alibeylan",
+    #"alibeylan",
   ]
 }
 
