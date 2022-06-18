@@ -4,3 +4,7 @@ locals {
     notadmins_team_id = github_team.notadmins.id
   }
 }
+
+variable "github_repository_constants" {
+  type = map
+}
