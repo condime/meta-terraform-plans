@@ -1,3 +1,7 @@
+variable "constants" {
+  type = map
+}
+
 variable "name" {}
 
 variable "description" {
@@ -7,8 +11,4 @@ variable "description" {
 variable "private" {
   type    = bool
   default = false
-}
-
-variable "constants" {
-  type = map
 }
