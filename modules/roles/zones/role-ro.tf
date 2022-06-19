@@ -50,7 +50,7 @@ data "aws_iam_policy_document" "assume-ro" {
       variable = "oidc.circleci.com/org/${var.organization_id}:oidc.circleci.com/context-ids"
 
       values = [
-        var.read_only_context
+        var.read_only_context_id
       ]
     }
   }
