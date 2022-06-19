@@ -8,7 +8,7 @@ resource "aws_iam_openid_connect_provider" "github" {
   #     -showcerts -connect token.actions.githubusercontent.com:443 \
   #     | openssl x509 -fingerprint -noout \
   #     | cut -d'=' -f 2 | sed -e 's/://g'
-  thumbprint_list = ["15E29108718111E59B3DAD31954647E3C344A231"]
+  thumbprint_list = ["15e29108718111e59b3dad31954647e3c344a231"]
 
   # GitHub Org
   client_id_list = [

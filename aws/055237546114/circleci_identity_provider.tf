@@ -10,7 +10,7 @@ resource "aws_iam_openid_connect_provider" "circleci" {
   #     -showcerts -connect oidc.circleci.com:443 \
   #     | openssl x509 -fingerprint -noout \
   #     | cut -d'=' -f 2 | sed -e 's/://g'
-  thumbprint_list = ["A40F8D2DB9C4E8F101A80FDAD0AAEBF50C5F4191"]
+  thumbprint_list = ["a40f8d2db9c4e8f101a80fdad0aaebf50c5f4191"]
 
   client_id_list = [
     # condime org
