@@ -21,11 +21,35 @@ data "aws_iam_policy_document" "assume-rw" {
       test     = "StringLike"
       variable = "oidc.circleci.com/org/${var.organization_id}:sub"
 
-      # XXX: lock this down further? default branch?
       values = [
         "org/${var.organization_id}/project/${var.project_id}/user/*",
       ]
     }
+
+    condition {
+      test     = "StringEquals"
+      variable = "oidc.circleci.com/org/${var.organization_id}:aud"
+
+      values = [
+        var.organization_id
+      ]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "oidc.circleci.com/org/${var.organization_id}:oidc.circleci.com/project-id"
+
+      values = [
+        var.project_id
+      ]
+
+    condition {
+      test     = "StringEquals"
+      variable = "oidc.circleci.com/org/${var.organization_id}:oidc.circleci.com/context-ids"
+
+      values = [
+        var.read_write_context
+      ]
   }
 }
 
