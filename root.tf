@@ -8,3 +8,10 @@ module "github" {
 module "aws_condime" {
   source = "./aws/055237546114"
 }
+
+# This is the condime project
+module "circleci_condime" {
+  source = "./circleci/condime"
+
+  circleci_project_constants = module.aws_condime.circleci_project_constants
+}
