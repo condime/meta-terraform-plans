@@ -42,6 +42,7 @@ data "aws_iam_policy_document" "assume-rw" {
       values = [
         var.project_id
       ]
+    }
 
     condition {
       test     = "StringEquals"
@@ -50,6 +51,7 @@ data "aws_iam_policy_document" "assume-rw" {
       values = [
         var.read_write_context
       ]
+    }
   }
 }
 

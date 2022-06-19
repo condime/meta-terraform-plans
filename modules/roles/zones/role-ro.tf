@@ -43,6 +43,7 @@ data "aws_iam_policy_document" "assume-ro" {
       values = [
         var.project_id
       ]
+    }
 
     condition {
       test     = "StringEquals"
@@ -51,6 +52,7 @@ data "aws_iam_policy_document" "assume-ro" {
       values = [
         var.read_only_context
       ]
+    }
   }
 }
 
