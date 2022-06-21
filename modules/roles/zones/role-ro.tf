@@ -35,24 +35,6 @@ data "aws_iam_policy_document" "assume-ro" {
         var.organization_id
       ]
     }
-
-    condition {
-      test     = "StringEquals"
-      variable = "oidc.circleci.com/org/${var.organization_id}:oidc.circleci.com/project-id"
-
-      values = [
-        var.project_id
-      ]
-    }
-
-    condition {
-      test     = "StringEquals"
-      variable = "oidc.circleci.com/org/${var.organization_id}:oidc.circleci.com/context-ids"
-
-      values = [
-        var.read_only_context_id
-      ]
-    }
   }
 }
 

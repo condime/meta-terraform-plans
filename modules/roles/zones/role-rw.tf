@@ -34,27 +34,10 @@ data "aws_iam_policy_document" "assume-rw" {
         var.organization_id
       ]
     }
-
-    condition {
-      test     = "StringEquals"
-      variable = "oidc.circleci.com/org/${var.organization_id}:oidc.circleci.com/project-id"
-
-      values = [
-        var.project_id
-      ]
-    }
-
-    condition {
-      test     = "StringEquals"
-      variable = "oidc.circleci.com/org/${var.organization_id}:oidc.circleci.com/context-ids"
-
-      values = [
-        var.read_write_context_id
-      ]
-    }
   }
 }
 
+# Disabled until this can be limited to only the `production` branch
 #resource "aws_iam_role_policy_attachment" "rw" {
 #  role       = aws_iam_role.rw.name
 #  policy_arn = aws_iam_policy.rw.arn
