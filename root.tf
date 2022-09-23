@@ -4,6 +4,10 @@ module "github" {
   github_repository_constants = module.aws_condime.github_repository_constants
 }
 
+module "driftctl" {
+  source = "./driftctl"
+}
+
 # This is the condi.me AWS subaccount
 module "aws_condime" {
   source = "./aws/055237546114"
