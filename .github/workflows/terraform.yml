@@ -28,32 +28,13 @@ jobs:
 
     # Install the latest version of Terraform CLI
     - name: Setup Terraform
-      run: |
-        if command -v terraform 2> /dev/null; then
-          terraform --version
-        else
-          TERRAFORM_RELEASE_TEMP_DIR="$(mktemp -d)"
-          TERRAFORM_RELEASE_BIN_DIR="${TF_TEMP_DIR}/$(uuidgen)"
-          wget -P "${TERRAFORM_RELEASE_TEMP_DIR}" \
-            "https://releases.hashicorp.com/terraform/${TERRAFORM_RELEASE}/terraform_${TERRAFORM_RELEASE}_linux_amd64.zip"
-
-          mkdir -v "${TERRAFORM_RELEASE_BIN_DIR}"
-          cd "${TERRAFORM_RELEASE_BIN_DIR}"
-          unzip ../terraform_${TERRAFORM_RELEASE}_linux_amd64.zip
-          export PATH="${TERRAFORM_RELEASE_BIN_DIR}:${PATH}"
-
-          terraform --version
-        fi
+      run: ./scripts/setup_terraform.sh
 
     # https://github.blog/changelog/2021-10-27-github-actions-secure-cloud-deployments-with-openid-connect/
     - name: Configure AWS Credentials
       run: |
-        echo AWS_ROLE_ARN="arn:aws:iam::055237546114:role/meta-terraform-plans-ro" >> $GITHUB_ENV
-        echo AWS_WEB_IDENTITY_TOKEN_FILE=webidentity.json                          >> $GITHUB_ENV
-        echo AWS_DEFAULT_REGION=eu-west-2                                          >> $GITHUB_ENV
-        source $GITHUB_ENV
-
-        curl -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL" | jq -r '.value' > webidentity.json
+        ./scripts/setup_aws_credentials.py \
+          --role-arn "arn:aws:iam::055237546114:role/meta-terraform-plans-ro"
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
@@ -107,22 +88,7 @@ jobs:
 
     # Install the latest version of Terraform CLI
     - name: Setup Terraform
-      run: |
-        if command -v terraform 2> /dev/null; then
-          terraform --version
-        else
-          TERRAFORM_RELEASE_TEMP_DIR="$(mktemp -d)"
-          TERRAFORM_RELEASE_BIN_DIR="${TF_TEMP_DIR}/$(uuidgen)"
-          wget -P "${TERRAFORM_RELEASE_TEMP_DIR}" \
-            "https://releases.hashicorp.com/terraform/${TERRAFORM_RELEASE}/terraform_${TERRAFORM_RELEASE}_linux_amd64.zip"
-
-          mkdir -v "${TERRAFORM_RELEASE_BIN_DIR}"
-          cd "${TERRAFORM_RELEASE_BIN_DIR}"
-          unzip ../terraform_${TERRAFORM_RELEASE}_linux_amd64.zip
-          export PATH="${TERRAFORM_RELEASE_BIN_DIR}:${PATH}"
-
-          terraform --version
-        fi
+      run: ./scripts/setup_terraform.sh
 
     # Terraform init (again), reload the providers
     - name: Terraform Init
