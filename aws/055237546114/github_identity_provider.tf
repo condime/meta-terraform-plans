@@ -4,11 +4,15 @@ resource "aws_iam_openid_connect_provider" "github" {
   url = "https://token.actions.githubusercontent.com"
 
   # Issued by DigiCert Inc, Valid from 10/22/2013 until 10/22/2028
-  # $ openssl s_client -servername token.actions.githubusercontent.com \
-  #     -showcerts -connect token.actions.githubusercontent.com:443 \
-  #     | openssl x509 -fingerprint -noout \
-  #     | cut -d'=' -f 2 | sed -e 's/://g'
-  thumbprint_list = ["15e29108718111e59b3dad31954647e3c344a231"]
+  #
+  # $ function tlsfingerprint() {
+  # > openssl s_client -servername "${1}" -showcerts -connect "${1}:443" </dev/null 2>/dev/null \
+  # > | openssl x509 -fingerprint -noout \
+  # > | cut -d= -f2 | sed -e 's/://g;s/\(.*\)/\L\1/'
+  # > }
+  #
+  # $ tlsfingerprint token.actions.githubusercontent.com
+  thumbprint_list = ["f879abce0008e4eb126e0097e46620f5aaae26ad"]
 
   # GitHub Org
   client_id_list = [

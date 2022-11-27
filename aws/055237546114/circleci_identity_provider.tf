@@ -6,11 +6,15 @@ resource "aws_iam_openid_connect_provider" "circleci" {
   url = "https://oidc.circleci.com/org/59214151-d3e1-44ba-8cfc-736fc1cc7176"
 
   # Issued by Amazon, Valid from 2021-10-24 until 2022-11-22
-  # $ openssl s_client -servername oidc.circleci.com \
-  #     -showcerts -connect oidc.circleci.com:443 \
-  #     | openssl x509 -fingerprint -noout \
-  #     | cut -d'=' -f 2 | sed -e 's/://g'
-  thumbprint_list = ["a40f8d2db9c4e8f101a80fdad0aaebf50c5f4191"]
+  #
+  # $ function tlsfingerprint() {
+  # > openssl s_client -servername "${1}" -showcerts -connect "${1}:443" </dev/null 2>/dev/null \
+  # > | openssl x509 -fingerprint -noout \
+  # > | cut -d= -f2 | sed -e 's/://g;s/\(.*\)/\L\1/'
+  # > }
+  #
+  # $ tlsfingerprint oidc.circleci.com
+  thumbprint_list = ["c510b3d1652c4d8b71b64911fb377d4d788c3a5a"]
 
   client_id_list = [
     # condime org
