@@ -6,11 +6,13 @@ resource "github_repository" "repository" {
 
   has_downloads = false
   has_issues    = false
+  has_projects  = false
   has_wiki      = false
 
-  allow_merge_commit = true
-  allow_rebase_merge = true
-  allow_squash_merge = true
+  delete_branch_on_merge = true
+  allow_merge_commit     = true
+  allow_rebase_merge     = true
+  allow_squash_merge     = true
 
   vulnerability_alerts = true
 }
