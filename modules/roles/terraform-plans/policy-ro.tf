@@ -8,9 +8,19 @@ data "aws_iam_policy_document" "terraform-plans-ro" {
     actions = [
       "iam:GetUser",
       "iam:GetRole",
+      "iam:GetRolePolicy",
       "iam:GetGroup",
+      "iam:ListAccessKeys",
       "iam:ListAttachedRolePolicies",
       "iam:ListRolePolicies",
+    ]
+
+    resources = ["*"]
+  }
+
+  statement {
+    actions = [
+      "kms:DescribeKey",
     ]
 
     resources = ["*"]
@@ -54,6 +64,30 @@ data "aws_iam_policy_document" "terraform-plans-ro" {
       "ecr-public:GetRepositoryCatalogData",
       "ecr-public:GetRepositoryPolicy",
       "ecr-public:ListTagsForResource",
+    ]
+
+    resources = ["*"]
+  }
+
+  statement {
+    actions = [
+      "ecs:DescribeClusters",
+    ]
+
+    resources = ["*"]
+  }
+
+  statement {
+    actions = [
+      "s3:ListAllMyBuckets",
+    ]
+
+    resources = ["*"]
+  }
+
+  statement {
+    actions = [
+      "logs:DescribeLogGroups",
     ]
 
     resources = ["*"]
