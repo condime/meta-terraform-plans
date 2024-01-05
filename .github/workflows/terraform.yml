@@ -9,7 +9,7 @@ on:
 
 env:
   GITHUB_OWNER: condime
-  GITHUB_TOKEN: ${{ secrets.ELEVATED_GITHUB_TOKEN }}       # Personal Access Token, contact @bencord0 to rotate
+  PRIVATE_KEY_PASSWORD: ${{ secrets.PRIVATE_KEY_PASSWORD }} # .secrets/private_key.pem.gpg decryption password
   CONSUL_HTTP_TOKEN: ${{ secrets.CONSUL_HTTP_TOKEN }}      # Repository specific, contact @bencord0 to rotate
   ARTIFACT_SECRET_KEY: ${{ secrets.ARTIFACT_SECRET_KEY }}  # Random, e.g. $(uuidgen); not stored, free to rotate at any time
 
@@ -47,8 +47,9 @@ jobs:
     # Generates an execution plan for Terraform
     - name: Terraform Plan
       run: |
+        ./scripts/decrypt_secrets.sh
         terraform plan -out ./tfplan.zip
-        openssl enc -pass env:ARTIFACT_SECRET_KEY -e -aes-256-ctr -pbkdf2 -in ./tfplan.zip -out tfplan.enc
+        ./scripts/encrypt_artifact.sh
 
     # Saves the plan as an artifact
     - name: Save Encrypted Plan
@@ -84,7 +85,7 @@ jobs:
     # Use openssl symmetric decryption, as github action artifacts are public
     - name: Decrypt Archived Plan
       run: |
-        openssl enc -pass env:ARTIFACT_SECRET_KEY -d -aes-256-ctr -pbkdf2 -in ./tfplan.enc -out tfplan.zip
+        ./scripts/decrypt_artifact.sh
 
     # Install the latest version of Terraform CLI
     - name: Setup Terraform
@@ -97,4 +98,6 @@ jobs:
     # On push to production or manual change reset infrastructure according to Terraform configuration files
     - name: Terraform Apply
       if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
-      run: terraform apply ./tfplan.zip
+      run: |
+        ./scripts/decrypt_secrets.sh
+        terraform apply ./tfplan.zip
