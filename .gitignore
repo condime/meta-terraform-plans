@@ -3,3 +3,6 @@ driftctl.out
 .terraform
 .terraform.lock.hcl
 terraform.tfstate
+
+tfplan.zip
+tfplan.enc
