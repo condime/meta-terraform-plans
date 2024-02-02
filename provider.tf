@@ -24,14 +24,14 @@ terraform {
 }
 
 provider "github" {
-  owner = "condime"
+  owner = var.github_owner
 
   app_auth {
     # https://github.com/organizations/condime/settings/apps/condime-meta-terraform-plans
     # https://github.com/organizations/condime/settings/installations/45795139
     id              = "783580"
     installation_id = "45795139"
-    pem_file        = file("./secrets/private-key.pem")
+    pem_file        = file("${path.module}/.secrets/private_key.pem")
   }
 }
 
