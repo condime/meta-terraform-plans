@@ -56,6 +56,17 @@ data "aws_iam_policy_document" "terraform-plans-ro" {
 
   statement {
     actions = [
+      "ec2:DescribeAddresses",
+      "ec2:DescribeAvailabilityZones",
+      "ec2:DescribeImages",
+      "ec2:DescribeVpcs",
+    ]
+
+    resources = ["*"]
+  }
+
+  statement {
+    actions = [
       "ecr-public:DescribeImageTags",
       "ecr-public:DescribeRegistries",
       "ecr-public:DescribeRepositories",

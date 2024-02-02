@@ -19,16 +19,20 @@ data "aws_iam_policy_document" "assume-terraform-plans-ro" {
     }
 
     # Match the specific repository on the `production` branch
-    # or workflow_dispatch runs in the `production` environment
     condition {
-      test     = "ForAnyValue:StringLike"
+      test     = "StringLike"
       variable = "token.actions.githubusercontent.com:sub"
 
       # https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect#examples
       values = [
-        "repo:${var.github_repository}:ref:*",
-        "repo:${var.github_repository}:pull_request",
+        "repo:${var.github_repository}:ref:refs/heads/production",
       ]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "token.actions.githubusercontent.com:aud"
+      values   = ["https://github.com/condime"]
     }
   }
 }
