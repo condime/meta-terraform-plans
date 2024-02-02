@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
 import os
+import uuid
 from argparse import ArgumentParser
+from pathlib import Path
 
 try:
     import requests
@@ -14,23 +16,13 @@ print(requests.__file__)
 
 parser = ArgumentParser()
 parser.add_argument('--role-arn')
-parser.add_argument('--web-identity-token-file', default="webidentity.json")
 parser.add_argument('--region', default='eu-west-2')
+
+github_env = Path(os.environ['GITHUB_ENV'])
 
 
 def main():
     args = parser.parse_args()
-
-    github_env_file = os.environ['GITHUB_ENV']
-
-    role_arn = args.role_arn
-    append_file(f'AWS_ROLE_ARN="{role_arn}"', github_env_file)
-
-    web_identity_token_file = args.web_identity_token_file
-    append_file(f'AWS_WEB_IDENTITY_TOKEN_FILE="{web_identity_token_file}"', github_env_file)
-
-    region = args.region
-    append_file(f'AWS_DEFAULT_REGION="{region}"', github_env_file)
 
     token_url = os.environ['ACTIONS_ID_TOKEN_REQUEST_URL']
     token_request_token = os.environ['ACTIONS_ID_TOKEN_REQUEST_TOKEN']
@@ -39,16 +31,28 @@ def main():
     })
 
     token = token_response.json()['value']
-    with open('webidentity.json', 'w') as f:
-        f.write(token)
+    path = write_tempfile(token)
+
+    append_env('AWS_ROLE_ARN', args.role_arn)
+    append_env('AWS_WEB_IDENTITY_TOKEN_FILE', path)
+    append_env('AWS_DEFAULT_REGION', args.region)
+
+
+def write_tempfile(content: str) -> Path:
+    temp = Path('/tmp/') / uuid.uuid4().hex
+    path = temp / 'webidentity.json'
+
+    temp.mkdir()
+    with path.open('w') as f:
+        f.write(content)
+
+    return path
 
 
 # https://docs.github.com/en/actions/learn-github-actions/environment-variables#passing-values-between-steps-and-jobs-in-a-workflow
-def append_file(line, file):
-    if not line.endswith('\n'):
-        line += '\n'
-
-    with open(file, 'a') as f:
+def append_env(key, value):
+    line = f'{key}={value}\n'
+    with github_env.open('a') as f:
         f.write(line)
 
 
