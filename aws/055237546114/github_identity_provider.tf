@@ -10,12 +10,26 @@ resource "aws_iam_openid_connect_provider" "github" {
   # > | openssl x509 -fingerprint -noout \
   # > | cut -d= -f2 | sed -e 's/://g;s/\(.*\)/\L\1/'
   # > }
-  #
-  # $ tlsfingerprint token.actions.githubusercontent.com
-  thumbprint_list = ["f879abce0008e4eb126e0097e46620f5aaae26ad"]
+  thumbprint_list = [
+    # $ tlsfingerprint token.actions.githubusercontent.com
+    "3ea80e902fc385f36bc08193fbc678202d572994",
+
+    # Intermediate Certificate
+    # $ curl http://cacerts.digicert.com/DigiCertGlobalG2TLSRSASHA2562020CA1-1.crt \
+    # >  | openssl x509 -inform der -fingerprint -noout \
+    # >  | cut -d= -f2 | sed -e 's/://g;s/\(.*\)/\L\1/'
+    "1b511abead59c6ce207077c0bf0e0043b1382612",
+
+    # DigiCert Root
+    # $ curl http://cacerts.digicert.com/DigiCertGlobalRootG2.crt \
+    # >  | openssl x509 -inform der -fingerprint -noout \
+    # >  | cut -d= -f2 | sed -e 's/://g;s/\(.*\)/\L\1/'
+    "df3c24f9bfd666761b268073fe06d1cc8d4f82a4",
+  ]
 
   # GitHub Org
   client_id_list = [
+    "sts.amazonaws.com",
     "https://github.com/condime",
   ]
 }
